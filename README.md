@@ -1,5 +1,7 @@
 # The Grandmother House Scorer
 
+![preview](assets/preview.png)
+
 ![banner](assets/banner.jpg)
 
 **Live app:** https://thebullbrew.github.io/grandmother-house-scorer/
