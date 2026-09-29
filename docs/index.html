@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grandmother House Scorer — Bull's Holy-Grail Deal Filter</title>
+<meta name="description" content="Score any listing against the grandmother-house method: good bones, systems risk, cosmetic discount, and max-offer math.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1F3522">
+<link rel="icon" href="icons/icon-32.png">
+<style>
+:root{
+  --green:#1F3522; --ivory:#F5F2E8; --gold:#B49A5B; --oxblood:#5C2A2A; --char:#2C2C2C;
+  --card:#fffdf6; --line:#e4dcc4; --muted:#6f6a58;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+body{margin:0; font-family:Georgia,'Times New Roman',serif; background:var(--ivory); color:var(--char); line-height:1.5}
+header{background:var(--green); color:var(--ivory); padding:28px 20px 24px; text-align:center; border-bottom:4px solid var(--gold)}
+header h1{margin:0; font-size:1.7rem; letter-spacing:.5px; color:var(--gold)}
+header p{margin:8px auto 0; max-width:560px; font-style:italic; opacity:.92; font-size:.98rem}
+main{max-width:720px; margin:0 auto; padding:18px 14px 90px}
+.card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; margin:14px 0; box-shadow:0 2px 8px rgba(44,44,44,.06)}
+.card h2{margin:0 0 4px; font-size:1.15rem; color:var(--green)}
+.card .sub{margin:0 0 14px; font-size:.9rem; color:var(--muted); font-style:italic}
+label{display:block; font-size:.85rem; color:var(--muted); margin:10px 0 4px}
+input[type=text],input[type=number],select{width:100%; padding:11px 12px; font-size:1rem; font-family:inherit; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--char)}
+input:focus,select:focus{outline:2px solid var(--gold); border-color:var(--gold)}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px}
+.check{display:flex; align-items:flex-start; gap:10px; padding:10px 12px; border:1px solid var(--line); border-radius:8px; margin:8px 0; background:#fff; cursor:pointer; user-select:none}
+.check input{margin-top:4px; width:18px; height:18px; accent-color:var(--green)}
+.check b{display:block; font-size:.95rem}
+.check span{font-size:.82rem; color:var(--muted)}
+.check.on{border-color:var(--gold); background:#fbf6e9}
+.sysgrid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.sysgrid .full{grid-column:1/-1}
+#results{position:sticky; top:0; z-index:5}
+.score-wrap{display:flex; gap:18px; align-items:center; margin:6px 0 12px}
+.dial{position:relative; width:120px; height:120px; flex:none}
+.dial svg{transform:rotate(-90deg)}
+.dial .num{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:2rem; color:var(--green)}
+.verdict{font-size:1.25rem; color:var(--green); margin:0}
+.verdict-sub{font-style:italic; color:var(--muted); margin:4px 0 0; font-size:.95rem}
+.bars{margin-top:12px}
+.bar-row{display:grid; grid-template-columns:110px 1fr 44px; gap:8px; align-items:center; margin:7px 0; font-size:.85rem}
+.bar-track{background:#e9e2cc; border-radius:6px; height:10px; overflow:hidden}
+.bar-fill{height:100%; background:linear-gradient(90deg,var(--green),var(--gold)); border-radius:6px; transition:width .4s}
+.money{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+.money .box{border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:#fff}
+.money .box small{display:block; color:var(--muted); font-size:.78rem}
+.money .box b{font-size:1.15rem; color:var(--green)}
+.flag{font-size:.82rem; margin-top:8px; padding:8px 10px; border-radius:8px; background:#f4ecd8; border:1px solid var(--gold)}
+.btn{display:block; width:100%; padding:14px; margin:12px 0; font-size:1.05rem; font-family:inherit; border:none; border-radius:10px; cursor:pointer}
+.btn-gold{background:var(--gold); color:#241f10; font-weight:bold}
+.btn-green{background:var(--green); color:var(--ivory)}
+.btn-ghost{background:transparent; color:var(--oxblood); border:1px solid var(--oxblood); padding:9px; font-size:.9rem}
+.deal{display:flex; justify-content:space-between; align-items:center; border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin:8px 0; background:#fff}
+.deal b{color:var(--green)}
+.deal small{color:var(--muted); display:block}
+.deal .acts{display:flex; gap:6px}
+.deal button{border:1px solid var(--line); background:var(--ivory); border-radius:6px; padding:6px 10px; cursor:pointer; font-family:inherit; font-size:.82rem}
+footer{text-align:center; color:var(--muted); font-size:.8rem; padding:24px 16px; font-style:italic}
+.hidden{display:none!important}
+@media(max-width:520px){ .sysgrid{grid-template-columns:1fr} .row3{grid-template-columns:1fr 1fr} }
+</style>
+</head>
+<body>
+<header>
+  <h1>The Grandmother House Scorer</h1>
+  <p>Long-tenure owner. Maintained systems. Dated cosmetics. Good bones.<br>Cosmetics are the discount — systems are the risk.</p>
+</header>
+<main>
+
+<div class="card" id="results">
+  <h2>Your score</h2>
+  <p class="sub">Fill in the listing below — the score updates live.</p>
+  <div class="score-wrap">
+    <div class="dial">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="52" fill="none" stroke="#e9e2cc" stroke-width="12"/>
+        <circle id="dialArc" cx="60" cy="60" r="52" fill="none" stroke="#B49A5B" stroke-width="12"
+                stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="num"><span id="scoreNum">–</span></div>
+    </div>
+    <div>
+      <p class="verdict" id="verdict">Score your first deal</p>
+      <p class="verdict-sub" id="verdictSub">The holy grail is out there. Let's find it.</p>
+    </div>
+  </div>
+  <div class="bars">
+    <div class="bar-row"><span>Good bones</span><div class="bar-track"><div class="bar-fill" id="barBones" style="width:0%"></div></div><span id="valBones">–</span></div>
+    <div class="bar-row"><span>Systems</span><div class="bar-track"><div class="bar-fill" id="barSys" style="width:0%"></div></div><span id="valSys">–</span></div>
+    <div class="bar-row"><span>Cosmetic discount</span><div class="bar-track"><div class="bar-fill" id="barCos" style="width:0%"></div></div><span id="valCos">–</span></div>
+    <div class="bar-row"><span>Margin</span><div class="bar-track"><div class="bar-fill" id="barMar" style="width:0%"></div></div><span id="valMar">–</span></div>
+  </div>
+  <div class="money">
+    <div class="box"><small>Est. rehab</small><b id="mRehab">–</b></div>
+    <div class="box"><small>Max offer (70% rule)</small><b id="mMao">–</b></div>
+    <div class="box"><small>Asking vs max offer</small><b id="mGap">–</b></div>
+    <div class="box"><small>Gross rent yield</small><b id="mYield">–</b></div>
+  </div>
+  <div class="flag hidden" id="rentFlag"></div>
+</div>
+
+<div class="card">
+  <h2>1 · The listing</h2>
+  <p class="sub">What caught your eye.</p>
+  <label>Deal nickname</label>
+  <input type="text" id="fLabel" placeholder="e.g. Blue shutters colonial">
+  <div class="row">
+    <div><label>Asking price ($)</label><input type="number" id="fPrice" inputmode="numeric" placeholder="250000"></div>
+    <div><label>Year built</label><input type="number" id="fYear" inputmode="numeric" placeholder="1962"></div>
+  </div>
+  <div class="row3">
+    <div><label>Beds</label><input type="number" id="fBeds" inputmode="numeric" placeholder="3"></div>
+    <div><label>Baths</label><input type="number" id="fBaths" inputmode="decimal" placeholder="1.5"></div>
+    <div><label>Sq ft</label><input type="number" id="fSqft" inputmode="numeric" placeholder="1600"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>2 · Good bones</h2>
+  <p class="sub">Structure and layout. This is what you can't cheaply change.</p>
+  <div id="bonesBox"></div>
+</div>
+
+<div class="card">
+  <h2>3 · Systems — the risk</h2>
+  <p class="sub">How old is the expensive stuff? Be honest. This is where deals die.</p>
+  <div class="sysgrid" id="sysBox"></div>
+</div>
+
+<div class="card">
+  <h2>4 · Cosmetics — the discount</h2>
+  <p class="sub">Ugly is the opportunity. The worse it looks, the better the price should be.</p>
+  <div class="sysgrid" id="cosBox"></div>
+</div>
+
+<div class="card">
+  <h2>5 · The money</h2>
+  <p class="sub">Underwrite it like an investor, not a homebuyer.</p>
+  <div class="row">
+    <div><label>After-repair value ($)</label><input type="number" id="fArv" inputmode="numeric" placeholder="340000"></div>
+    <div><label>Monthly rent after reno ($)</label><input type="number" id="fRent" inputmode="numeric" placeholder="2400"></div>
+  </div>
+  <label>Offer rule (% of ARV)</label>
+  <select id="fRule"><option value="0.65">65% — conservative</option><option value="0.70" selected>70% — standard</option><option value="0.75">75% — aggressive</option></select>
+</div>
+
+<button class="btn btn-gold" id="saveBtn">Save this deal to my pipeline</button>
+
+<div class="card">
+  <h2>My pipeline</h2>
+  <p class="sub">Saved deals live in this browser. Walk them, rank them, buy the best one.</p>
+  <div id="dealList"><p style="color:var(--muted); font-style:italic">No saved deals yet.</p></div>
+  <button class="btn btn-ghost hidden" id="clearBtn">Clear pipeline</button>
+</div>
+
+</main>
+<footer>
+  Built for investors who buy bones, not paint. Estimates are planning ranges, not quotes — verify everything with your own eyes and your contractor.
+</footer>
+<script>
+const $ = id => document.getElementById(id);
+const fmt$ = n => n==null||isNaN(n) ? "–" : "$" + Math.round(n).toLocaleString("en-US");
+
+const BONES = [
+  ["foundation","Foundation is solid","No cracks, no water, no scary basement."],
+  ["layout","Layout works","Bedrooms/baths make sense; no chopped-up additions."],
+  ["structure","No structural red flags","Roofline straight, floors level, no sagging."],
+  ["lot","Lot & location decent","Usable yard, street you'd rent on."],
+];
+const SYS = [
+  ["roof","Roof",0.30],["hvac","HVAC / furnace",0.25],["plumbing","Plumbing",0.15],
+  ["electrical","Electrical panel",0.20],["heater","Water heater",0.10],
+];
+const SYS_OPTS = [["new","New (<5 yrs)",0],["mid","Mid-life (5–15 yrs)",25],["aging","Aging (15–25 yrs)",60],["old","Original / 25+ yrs",100]];
+const COS = [
+  ["kitchen","Kitchen",[0,3000,9000,18000],[0,6000,15000,30000]],
+  ["baths","Bathrooms",[0,2000,5000,9000],[0,4000,9000,18000]],
+  ["flooring","Flooring",[0,2000,5000,8000],[0,4000,10000,16000]],
+  ["walls","Walls & paint",[0,1000,2000,4000],[0,2000,5000,8000]],
+  ["windows","Windows",[0,0,3000,8000],[0,2000,8000,15000]],
+];
+const COS_OPTS = [["updated","Updated",0],["dated","Dated but functional",35],["retro","Frozen in the 70s",70],["gut","Gut needed",100]];
+
+// Build bones checkboxes
+$("bonesBox").innerHTML = BONES.map(([k,t,s]) =>
+  `<label class="check" data-k="${k}"><input type="checkbox"><span><b>${t}</b><span>${s}</span></span></label>`).join("");
+// Build systems + cosmetics selects
+$("sysBox").innerHTML = SYS.map(([k,t]) =>
+  `<div><label>${t}</label><select data-sys="${k}">${SYS_OPTS.map(([v,l])=>`<option value="${v}">${l}</option>`).join("")}</select></div>`).join("");
+$("cosBox").innerHTML = COS.map(([k,t]) =>
+  `<div><label>${t}</label><select data-cos="${k}">${COS_OPTS.map(([v,l])=>`<option value="${v}">${l}</option>`).join("")}</select></div>`).join("");
+
+document.querySelectorAll(".check").forEach(el=>{
+  el.querySelector("input").addEventListener("change",e=>{ el.classList.toggle("on",e.target.checked); score(); });
+});
+document.querySelectorAll("input,select").forEach(el=> el.addEventListener("input",score));
+
+const num = id => { const v = parseFloat($(id).value); return isNaN(v)?null:v; };
+const selVal = (attr,key) => document.querySelector(`[${attr}="${key}"]`).value;
+
+function score(){
+  // Bones
+  const bonesChecked = [...document.querySelectorAll("#bonesBox input")].filter(i=>i.checked).length;
+  const bones = bonesChecked/BONES.length*100;
+  // Systems
+  let risk=0;
+  SYS.forEach(([k,,w])=>{ const o=SYS_OPTS.find(o=>o[0]===selVal("data-sys",k)); risk+=o[2]*w; });
+  const sys = 100-risk;
+  // Cosmetics
+  let cosPts=0, rehabLo=0, rehabHi=0;
+  COS.forEach(([k,,lo,hi])=>{
+    const o=COS_OPTS.find(o=>o[0]===selVal("data-cos",k)); const idx=COS_OPTS.indexOf(o);
+    cosPts+=o[2]; rehabLo+=lo[idx]; rehabHi+=hi[idx];
+  });
+  const cos = cosPts/COS.length;
+  const rehabMid=(rehabLo+rehabHi)/2;
+  // Margin
+  const price=num("fPrice"), arv=num("fArv"), rent=num("fRent"), rule=parseFloat($("fRule").value);
+  let margin=null;
+  if(arv&&price!=null){ const spread=arv-price-rehabMid; margin=Math.max(0,Math.min(100,spread/(0.25*arv)*100)); }
+  // Total
+  const parts=[[bones,.30],[sys,.30],[cos,.25]]; if(margin!=null)parts.push([margin,.15]);
+  const wsum=parts.reduce((a,p)=>a+p[1],0);
+  const total=Math.round(parts.reduce((a,p)=>a+p[0]*p[1],0)/wsum);
+  // Render
+  const C=326.7;
+  $("dialArc").style.strokeDashoffset = C - C*total/100;
+  $("dialArc").setAttribute("stroke", total>=80?"#1F3522":total>=60?"#B49A5B":total>=40?"#a06a2c":"#5C2A2A");
+  $("scoreNum").textContent=total;
+  const v=$("verdict"), vs=$("verdictSub");
+  if(total>=80){ v.textContent="Holy grail."; vs.textContent="Run the numbers tonight. Call the agent in the morning."; }
+  else if(total>=60){ v.textContent="Worth a walkthrough."; vs.textContent="Verify the systems with your own eyes before you fall in love."; }
+  else if(total>=40){ v.textContent="Only at a discount."; vs.textContent="The numbers have to come to you — don't chase it."; }
+  else { v.textContent="Pass."; vs.textContent="There will be another one. There always is."; }
+  const set=(b,vv,val)=>{ $(b).style.width=vv+"%"; $(val).textContent=Math.round(vv); };
+  set("barBones",bones,"valBones"); set("barSys",sys,"valSys"); set("barCos",cos,"valCos");
+  if(margin!=null){ set("barMar",margin,"valMar"); } else { $("barMar").style.width="0%"; $("valMar").textContent="–"; }
+  $("mRehab").textContent = fmt$(rehabLo)+" – "+fmt$(rehabHi);
+  const mao = arv!=null ? arv*rule-rehabMid : null;
+  $("mMao").textContent = fmt$(mao);
+  $("mGap").textContent = (mao!=null&&price!=null) ? ((mao>=price?"+":"−")+fmt$(Math.abs(mao-price)).slice(0)) : "–";
+  if(mao!=null&&price!=null){ const g=mao-price; $("mGap").textContent=(g>=0?"+":"−")+"$"+Math.abs(Math.round(g)).toLocaleString("en-US"); $("mGap").style.color=g>=0?"#1F3522":"#5C2A2A"; }
+  else $("mGap").textContent="–";
+  const yld = (rent!=null&&price) ? rent*12/price*100 : null;
+  $("mYield").textContent = yld!=null ? yld.toFixed(1)+"%" : "–";
+  const rf=$("rentFlag");
+  if(yld!=null){ rf.classList.remove("hidden");
+    rf.textContent = yld>=1 ? "✓ Clears the 1% rule — strong cash-flow territory."
+      : yld>=0.8 ? "Near the 1% rule. Works in the right market with the right financing."
+      : "Below the 1% rule — this one needs appreciation or a bigger discount to make sense.";
+  } else rf.classList.add("hidden");
+  return {total,bones,sys,cos,margin,rehabLo,rehabHi,mao,verdict:v.textContent};
+}
+
+// Pipeline (localStorage)
+const KEY="ghs-deals-v1";
+const load=()=>{ try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]} };
+const saveAll=d=>localStorage.setItem(KEY,JSON.stringify(d));
+function snapshot(){
+  const s=score();
+  return { id:Date.now(), ts:new Date().toLocaleDateString(),
+    label:$("fLabel").value||"Untitled deal", price:num("fPrice"), arv:num("fArv"),
+    beds:$("fBeds").value, baths:$("fBaths").value, total:s.total, verdict:s.verdict,
+    inputs:{ label:$("fLabel").value, price:$("fPrice").value, year:$("fYear").value,
+      beds:$("fBeds").value, baths:$("fBaths").value, sqft:$("fSqft").value, arv:$("fArv").value,
+      rent:$("fRent").value, rule:$("fRule").value,
+      bones:[...document.querySelectorAll("#bonesBox input")].map(i=>i.checked),
+      sys:SYS.map(([k])=>selVal("data-sys",k)), cos:COS.map(([k])=>selVal("data-cos",k)) } };
+}
+function renderDeals(){
+  const d=load().sort((a,b)=>b.total-a.total), box=$("dealList");
+  $("clearBtn").classList.toggle("hidden",!d.length);
+  if(!d.length){ box.innerHTML='<p style="color:var(--muted); font-style:italic">No saved deals yet.</p>'; return; }
+  box.innerHTML=d.map(x=>`<div class="deal"><div><b>${x.total} — ${esc(x.label)}</b><small>${x.verdict} · ${x.ts}${x.price?" · "+fmt$(x.price):""}</small></div><div class="acts"><button data-load="${x.id}">Load</button><button data-del="${x.id}">✕</button></div></div>`).join("");
+  box.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ saveAll(load().filter(x=>x.id!=b.dataset.del)); renderDeals(); });
+  box.querySelectorAll("[data-load]").forEach(b=>b.onclick=()=>{
+    const x=load().find(x=>x.id==b.dataset.load); if(!x)return; const inp=x.inputs;
+    $("fLabel").value=inp.label||""; $("fPrice").value=inp.price||""; $("fYear").value=inp.year||"";
+    $("fBeds").value=inp.beds||""; $("fBaths").value=inp.baths||""; $("fSqft").value=inp.sqft||"";
+    $("fArv").value=inp.arv||""; $("fRent").value=inp.rent||""; $("fRule").value=inp.rule||"0.70";
+    document.querySelectorAll("#bonesBox .check").forEach((el,i)=>{ el.querySelector("input").checked=!!inp.bones[i]; el.classList.toggle("on",!!inp.bones[i]); });
+    SYS.forEach(([k],i)=>document.querySelector(`[data-sys="${k}"]`).value=inp.sys[i]);
+    COS.forEach(([k],i)=>document.querySelector(`[data-cos="${k}"]`).value=inp.cos[i]);
+    score(); window.scrollTo({top:0,behavior:"smooth"});
+  });
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("saveBtn").onclick=()=>{ const d=load(); d.push(snapshot()); saveAll(d); renderDeals(); };
+$("clearBtn").onclick=()=>{ if(confirm("Clear the whole pipeline?")){ saveAll([]); renderDeals(); } };
+renderDeals(); score();
+
+// PWA
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
